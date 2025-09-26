@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// A user who owns boards
+model User {
+  id        String   @id @default(cuid()) // Unique ID (random string)
+  email     String   @unique              // Every email must be different
+  password  String                           // For now, just plain text (later we hash it)
+  boards    Board[]                         // One user can have many boards
+  createdAt DateTime @default(now())        // Auto set when created
+}
+
+// A board (like "Project Alpha")
+model Board {
+  id        String   @id @default(cuid())
+  title     String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  lists     List[]
+  createdAt DateTime @default(now())
+}
+
+// A list (like "Todo", "Doing", "Done")
+model List {
+  id        String   @id @default(cuid())
+  title     String
+  order     Int
+  board     Board    @relation(fields: [boardId], references: [id])
+  boardId   String
+  tasks     Task[]
+  createdAt DateTime @default(now())
+}
+
+// A task (like "Buy milk")
+model Task {
+  id        String   @id @default(cuid())
+  title     String
+  order     Int
+  list      List     @relation(fields: [listId], references: [id])
+  listId    String
+  createdAt DateTime @default(now())
+}

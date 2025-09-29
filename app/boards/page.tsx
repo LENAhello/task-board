@@ -2,13 +2,13 @@ import Link from "next/link";
 import React from "react";
 import BoardCard from "../components/BoardCard";
 import prisma from "@/lib/prisma";
+import { createBoard } from "../actions/actions";
+import ShowFormButton from "../components/AddDialog";
+import CreateForm from "../components/CreateForm";
 
 
 const page = async () => {
-    const boards = [
-        { id: "1", title: "Project Alpha" },
-        { id: "2", title: "Shopping List" },
-    ];
+    const boards = await prisma.board.findMany();
     
     const users = await prisma.user.findMany();
     return (
@@ -24,6 +24,7 @@ const page = async () => {
                     <h1 key={i}>{user.email}</h1>
                 ))}
             </div>
+            <CreateForm create={createBoard} id='yyy'/>
         </main>
     );
 };

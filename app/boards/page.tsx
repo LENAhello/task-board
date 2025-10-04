@@ -3,8 +3,7 @@ import React from "react";
 import BoardCard from "../components/BoardCard";
 import prisma from "@/lib/prisma";
 import { createBoard } from "../actions/actions";
-import ShowFormButton from "../components/AddDialog";
-import CreateForm from "../components/CreateForm";
+import AddDialog from "../components/AddDialog";
 
 
 const page = async () => {
@@ -24,7 +23,7 @@ const page = async () => {
                     <h1 key={i}>{user.email}</h1>
                 ))}
             </div>
-            <CreateForm create={createBoard} id='yyy'/>
+            <AddDialog create={createBoard}/>
         </main>
     );
 };

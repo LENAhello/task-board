@@ -1,7 +1,6 @@
-import { createList, createTask } from "@/app/actions/actions";
+import { createList } from "@/app/actions/actions";
 import AddDialog from "@/app/components/AddDialog";
-import CreateForm from "@/app/components/CreateForm";
-import ListColumn from "@/app/components/ListColumn";
+import BoardClient from "@/app/components/BoardClient";
 import prisma from "@/lib/prisma";
 import React from "react";
 
@@ -19,16 +18,20 @@ const page = async ({ params }: {params: Promise<{ id: string }>}) => {
         },
     });
     
+    if (!board) return <p>Board not found</p>;
+    
+
     return (
         <main className="p-8 bg-gray-100 min-h-screen">
             <h1 className="text-3xl font-bold mb-6">{board?.title}</h1>
             <div className="flex gap-6 overflow-x-auto">
-                {board?.lists.map((list) => (
+                {/* {board?.lists.map((list) => (
                     <ListColumn key={list.id} id={list.id} title={list.title} tasks={list.tasks} />
-                ))}
+                ))} */}
+                <BoardClient lists={board?.lists}/>
             </div>
             <div>
-                <CreateForm create={createList} id={id}/>
+                <AddDialog id={id} create={createList}/>
             </div>
         </main>
     );

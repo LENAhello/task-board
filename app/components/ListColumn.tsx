@@ -1,27 +1,68 @@
 'use client'
-import { DndContext } from "@dnd-kit/core";
-import { createTask } from "../actions/actions";
-import AddDialog from "./AddDialog";
-import TaskCard from "./TaskCard";
 
-type Props = {
-  title: string;
-  id: string;
-  tasks: {id: string; title: string; createdAt: Date; order: number; listId: string;}[];
-};
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import AddDialog from './AddDialog'
+import { createTask } from '../actions/actions'
+import { useDraggable, useDroppable } from '@dnd-kit/core'
 
-export default function ListColumn({ title, id, tasks }: Props) {
+type Task = {
+  id: string
+  title: string
+  order: number
+  listId: string
+}
+
+export default function ListColumn({
+  title,
+  id,
+  tasks,
+}: {
+  title: string
+  id: string
+  tasks: Task[]
+}) {
+
+  const { setNodeRef } = useDroppable({
+    id: id,
+  });
   return (
-    <div className="bg-white rounded-xl shadow w-64 flex-shrink-0">
-        <div className="p-4 border-b flex justify-between">
-            <h2 className="text-lg font-semibold">{title}</h2>
-            <AddDialog id={id} create={createTask}/>
-        </div>
-        <ul className="p-4 space-y-2">
-          {tasks.map((t, i) => (
-            <TaskCard key={i} title={t.title} />
-          ))}
-        </ul>
+    <div className="bg-gray-100 rounded-xl shadow w-64 flex-shrink-0">
+      <div className="p-4 border-b flex justify-between">
+        <h2 className="text-lg font-semibold">{title}</h2>
+        <AddDialog id={id} create={createTask} />
+      </div>
+      <div ref={setNodeRef} className="p-3">
+        {tasks.map((task) => (
+          <TaskCard key={task.id} task={task} />
+        ))}
+      </div>
     </div>
-  );
+  )
+}
+
+function TaskCard({ task }: { task: Task }) {
+  const { attributes, listeners, setNodeRef, transform } = useDraggable
+    ({
+      id: task.id,
+      data: { listId: task.listId },
+    })
+
+    const style = transform
+    ? {
+        transform: `translate(${transform.x}px, ${transform.y}px)`,
+      }
+    : undefined;
+
+  return (
+    <div
+      ref={setNodeRef}
+      {...attributes}
+      {...listeners}
+      style={style}
+      className="p-3 mb-2 bg-white rounded-lg shadow cursor-grab"
+    >
+      {task.title}
+    </div>
+  )
 }

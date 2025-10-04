@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
 interface AddTaskDialogProps {
-    id: string; 
+    id?: string; 
     create: (formData: FormData) => Promise<void>;
 }
 
@@ -30,7 +30,7 @@ export default function AddDialog({ id, create }: AddTaskDialogProps) {
                 {/* Modal content */}
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
-                    <DialogTitle>Add New Task</DialogTitle>
+                        <DialogTitle>Add New Task</DialogTitle>
                     </DialogHeader>
 
                     {/* Form with server action */}

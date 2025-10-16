@@ -17,7 +17,6 @@ const page = async ({ params }: {params: Promise<{ id: string }>}) => {
             },
         },
     });
-    
     if (!board) return <p>Board not found</p>;
     
 

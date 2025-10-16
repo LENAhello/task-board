@@ -1,7 +1,5 @@
 'use client'
 
-import { useSortable } from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
 import AddDialog from './AddDialog'
 import { createTask } from '../actions/actions'
 import { useDraggable, useDroppable } from '@dnd-kit/core'
@@ -27,15 +25,20 @@ export default function ListColumn({
     id: id,
   });
   return (
-    <div className="bg-gray-100 rounded-xl shadow w-64 flex-shrink-0">
+    <div className="bg-gray-100 rounded-xl shadow w-64 flex flex-col">
       <div className="p-4 border-b flex justify-between">
         <h2 className="text-lg font-semibold">{title}</h2>
         <AddDialog id={id} create={createTask} />
       </div>
-      <div ref={setNodeRef} className="p-3">
-        {tasks.map((task) => (
-          <TaskCard key={task.id} task={task} />
-        ))}
+      <div ref={setNodeRef} className="p-3 border-black border-2">
+        {tasks.length === 0 ? 
+        ( 
+          <p className="text-gray-500 text-sm text-center">No tasks yet</p>
+        ):( 
+          tasks.map((task) => (
+            <TaskCard key={task.id} task={task} />)
+          ))
+        }
       </div>
     </div>
   )

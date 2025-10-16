@@ -37,3 +37,14 @@ export async function createTask(formData: FormData){
 
     revalidatePath('/boards');
 }
+
+export async function moveTask(taskId: string, newListId: string) {
+    try {
+        await prisma.task.update({
+            where: { id: taskId },
+            data: { listId: newListId },
+        });
+    } catch (error) {
+        console.error("Error moving task:", error);
+    }
+}

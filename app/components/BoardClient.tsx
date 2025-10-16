@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import ListColumn from './ListColumn';
+import { moveTask } from "@/app/actions/actions";
 
 type Task = {
     id: string
@@ -21,24 +22,22 @@ export default function BoardClient({ lists }: {lists: List[]}) {
 
     const [tasks, setTasks] = useState<Task[]>(lists.flatMap(l => l.tasks));
 
-    function handleDragEnd(event: DragEndEvent) {
+    async function handleDragEnd(event: DragEndEvent) {
         const { active, over } = event;
-
         if (!over) return;
-
+      
         const taskId = active.id as string;
-        const newList = over.id as Task['listId'];
-
-        setTasks(() =>
-            tasks.map((task) =>
-              task.id === taskId
-                ? {
-                    ...task,
-                    listId: newList,
-                  }
-                : task,
-            ),
-          );
+        const newList = over.id as string;
+      
+        // Update UI right away (so it feels instant)
+        setTasks((prev) =>
+            prev.map((task) =>
+                task.id === taskId ? { ...task, listId: newList } : task
+            )
+        );
+      
+        // Tell the backend to update the database
+        await moveTask(taskId, newList);
     }
 
     return (

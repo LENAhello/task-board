@@ -25,15 +25,15 @@ export default function ListColumn({
     id: id,
   });
   return (
-    <div className="bg-gray-100 rounded-xl shadow w-64 flex flex-col">
+    <div className="bg-gray-100 rounded-xl shadow w-64 flex flex-col h-auto self-start">
       <div className="p-4 border-b flex justify-between">
         <h2 className="text-lg font-semibold">{title}</h2>
         <AddDialog id={id} create={createTask} />
       </div>
-      <div ref={setNodeRef} className="p-3 border-black border-2">
+      <div ref={setNodeRef} className="p-3">
         {tasks.length === 0 ? 
         ( 
-          <p className="text-gray-500 text-sm text-center">No tasks yet</p>
+          <div className="text-gray-500 text-sm text-center size-full">No tasks yet</div>
         ):( 
           tasks.map((task) => (
             <TaskCard key={task.id} task={task} />)

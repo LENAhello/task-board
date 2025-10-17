@@ -2,6 +2,8 @@
 
 import prisma from "@/lib/prisma"
 import { revalidatePath } from "next/cache";
+import z, { success } from "zod";
+import { LoginSchema } from "../utils/validationSchemas";
 
 export async function createBoard(formData: FormData){
     await prisma.board.create({
@@ -47,4 +49,16 @@ export async function moveTask(taskId: string, newListId: string) {
     } catch (error) {
         console.error("Error moving task:", error);
     }
+}
+
+export async function loginAction(data: z.infer<typeof LoginSchema>){
+
+    const validation = LoginSchema.safeParse(data);
+    if (!validation.success) {
+        return { error : validation.error.issues[0].message};
+    }
+
+    console.log(data);
+    return { success: 'Logged in successfully'}
+
 }

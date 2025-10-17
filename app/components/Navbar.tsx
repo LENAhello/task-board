@@ -34,7 +34,6 @@ const Navbar = () => {
                 </div>
         
                 {/* Right Side (Login/Profile) */}
-                
                 <div>
                 <Link
                     href="/login"

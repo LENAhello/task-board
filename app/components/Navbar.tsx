@@ -34,11 +34,16 @@ const Navbar = () => {
                 </div>
         
                 {/* Right Side (Login/Profile) */}
+                
                 <div>
-                    <Button variant="outline" asChild>
-                        <Link href="/login">Login</Link>
-                    </Button>
+                <Link
+                    href="/login"
+                    className="px-5 py-2 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors duration-300"
+                >
+                    Login
+                </Link>
                 </div>
+
             </div>
       </nav>
 

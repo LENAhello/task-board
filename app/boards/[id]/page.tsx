@@ -1,7 +1,7 @@
 import { createList } from "@/app/actions/actions";
 import AddDialog from "@/app/components/AddDialog";
 import BoardClient from "@/app/components/BoardClient";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import React from "react";
 
 const page = async ({ params }: {params: Promise<{ id: string }>}) => {

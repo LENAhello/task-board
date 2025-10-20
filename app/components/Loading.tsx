@@ -1,6 +1,6 @@
 import React from "react";
 
-const Loading = () => {
+const Loading = ({ title } : { title : string }) => {
   return (
     <div className="flex justify-center items-center">
       <svg
@@ -23,7 +23,7 @@ const Loading = () => {
           d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
         ></path>
       </svg>
-        <p className="ml-2">Logging in...</p>
+        <p className="ml-2">{title}</p>
     </div>
   );
 };

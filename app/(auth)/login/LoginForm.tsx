@@ -75,7 +75,7 @@ const LoginForm = () => {
                 disabled={loading}
                 className="w-full bg-white/80 text-blue-800 py-2 rounded-lg font-semibold hover:bg-white/90 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
             >
-                {loading ? <Loading/> : 'Log in'}
+                {loading ? <Loading title='logging in ...'/> : 'Log in'}
             </button>
         </form>
 

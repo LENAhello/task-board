@@ -6,21 +6,49 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../app/generated/prisma"
+  output   = "../node_modules/.prisma/client"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
+ 
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+ 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@id([provider, providerAccountId])
+  @@map("accounts")
+}
 // A user who owns boards
 model User {
-  id        String   @id @default(cuid()) // Unique ID (random string)
-  email     String   @unique              // Every email must be different
-  password  String                           // For now, just plain text (later we hash it)
-  boards    Board[]                         // One user can have many boards
-  createdAt DateTime @default(now())        // Auto set when created
+  id            String  @id @default(cuid()) // Unique ID (random string)
+  name          String?
+  email         String          @unique
+  password      String?
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+ 
+  boards    Board[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("users")
 }
 
 // A board (like "Project Alpha")

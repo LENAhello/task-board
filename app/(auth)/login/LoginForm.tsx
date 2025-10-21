@@ -27,16 +27,11 @@ const LoginForm = () => {
             return setClientErrors(validation.error.issues[0].message);
         }
 
+        setLoading(true);
         loginAction({email, password}).then((result) => {
-            if (result?.error) setServerErrors(result.error);
-            if (result?.success) setServerSuccess(result.success);
+            if (!result.success) setServerErrors(result.message ?? '');
+            setLoading(false);
         });
-
-        setEmail('');
-        setPassword('');
-        setClientErrors('');
-        setServerErrors('');
-        setServerSuccess('');
     }
     return(
         <>
@@ -50,6 +45,7 @@ const LoginForm = () => {
                     className="w-full px-4 py-2 rounded-lg bg-white/20 border border-white/30 placeholder-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-400"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    disabled={loading}
                 />
             </div>
 
@@ -62,6 +58,7 @@ const LoginForm = () => {
                     className="w-full px-4 py-2 rounded-lg bg-white/20 border border-white/30 placeholder-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-400"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    disabled={loading}
                 />
             </div>
             <div className={`transition-all duration-300 ${clientErrors || serverErrors || serverSuccess ? 'visible' : 'invisible'}`}>

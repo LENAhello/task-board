@@ -39,9 +39,9 @@ const RegisterForm = () => {
 
       if(!result.success) setServerErrors(result.message);
       
+      setLoading(false);
     });
     
-    setLoading(false);
   }
   return (
     <form className="space-y-4" onSubmit={handleSubmit}>

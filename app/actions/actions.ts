@@ -5,6 +5,8 @@ import { revalidatePath } from "next/cache";
 import z, { success } from "zod";
 import { LoginSchema, RegisterSchema } from "../utils/validationSchemas";
 import * as bcrypt from 'bcryptjs';
+import { signIn, signOut } from "@/auth";
+import { AuthError } from "next-auth";
 
 export async function createBoard(formData: FormData){
     await prisma.board.create({
@@ -56,10 +58,24 @@ export async function loginAction(data: z.infer<typeof LoginSchema>){
 
     const validation = LoginSchema.safeParse(data);
     if (!validation.success) {
-        return { error : validation.error.issues[0].message};
+        return { success: false, message : validation.error.issues[0].message};
     }
 
-    console.log(data);
+    const { email, password} = validation.data;
+
+    try{
+        await signIn('credentials', {email, password, redirectTo: '/profile'});
+    } catch (error) {
+        if(error instanceof AuthError) {
+            switch(error.type) {
+                case 'CredentialsSignin':
+                    return { success : false, message: 'Invalid email or password'};
+                default:
+                    return { success : false, message: 'Something went wrong'};
+            }
+        }
+        throw error;
+    }
     return { success: 'Logged in successfully'}
 }
 
@@ -83,4 +99,8 @@ export async function registerAction(data: z.infer<typeof RegisterSchema>){
 
     console.log(data);
     return { success: true, message: 'User registered successfully'}
+}
+
+export const logoutAction = async () => {
+    await signOut();
 }

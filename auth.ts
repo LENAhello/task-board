@@ -8,6 +8,15 @@ import Credentials from 'next-auth/providers/credentials';
 import * as bcrypt from 'bcryptjs';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  callbacks: {
+    async jwt({ token }) {
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user && token.sub) session.user.id = token.sub;
+      return session;
+    }
+  },
   adapter: PrismaAdapter(prisma),
   session: { strategy: 'jwt' },
   providers: [ 
@@ -25,5 +34,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return null;
       }
     }),
-    Github, Google ],
+    Github({
+      clientId: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET
+    }), Google ],
 })

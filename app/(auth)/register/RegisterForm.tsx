@@ -2,6 +2,7 @@
 import { registerAction } from "@/app/actions/actions";
 import Alert from "@/app/components/Alert";
 import Loading from "@/app/components/Loading";
+import SocialsProviders from "@/app/components/SocialsProviders";
 import { RegisterSchema } from "@/app/utils/validationSchemas";
 import React, { useState } from "react";
 
@@ -92,6 +93,8 @@ const RegisterForm = () => {
       >
         {loading ? <Loading title='Registering user...'/> : 'Register'}
       </button>
+
+      <SocialsProviders/>
     </form>
   );
 };

@@ -2,11 +2,9 @@
 import { loginAction } from "@/app/actions/actions";
 import Alert from "@/app/components/Alert";
 import Loading from "@/app/components/Loading";
+import SocialsProviders from "@/app/components/SocialsProviders";
 import { LoginSchema } from "@/app/utils/validationSchemas";
 import React, { useState } from "react";
-import { BsGoogle } from "react-icons/bs";
-import {FaGithub} from 'react-icons/fa'
-
 
 const LoginForm = () => {
 
@@ -84,17 +82,7 @@ const LoginForm = () => {
         </div>
 
         {/* Social Buttons */}
-        <div className="flex gap-4">
-            <button className="flex-1 flex items-center justify-center gap-2 bg-white/10 border border-white/30 py-2 rounded-lg hover:bg-white/20 transition-all duration-300">
-                <BsGoogle className="text-xl" color="white"/>
-                Google
-            </button>
-
-            <button className="flex-1 flex items-center justify-center gap-2 bg-white/10 border border-white/30 py-2 rounded-lg hover:bg-white/20 transition-all duration-300">
-                <FaGithub className="text-xl" />
-                GitHub
-            </button>
-        </div>
+        <SocialsProviders />
         </>
     );
 };

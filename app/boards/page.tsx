@@ -4,6 +4,7 @@ import BoardCard from "../components/BoardCard";
 import { prisma } from "@/lib/prisma";
 import { createBoard } from "../actions/actions";
 import AddDialog from "../components/AddDialog";
+import { auth } from "@/auth";
 
 interface Board {
     id: string
@@ -12,7 +13,9 @@ interface Board {
 }
 
 const page = async () => {
-    const boards = await prisma.board.findMany();
+    const session = await auth();
+    const userId = session?.user.id
+    const boards = await prisma.board.findMany( { where: {userId: userId} } );
     
     // const users = await prisma.user.findMany();
     return (
@@ -28,7 +31,7 @@ const page = async () => {
                     <h1 key={i}>{user.email}</h1>
                 ))} */}
             </div>
-            <AddDialog create={createBoard}/>
+            <AddDialog create={createBoard} title='Create New Board'/>
         </main>
     );
 };

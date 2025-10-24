@@ -28,7 +28,7 @@ export default function ListColumn({
     <div className="bg-gray-100 rounded-xl shadow w-64 flex flex-col h-auto self-start">
       <div className="p-4 border-b flex justify-between">
         <h2 className="text-lg font-semibold">{title}</h2>
-        <AddDialog id={id} create={createTask} />
+        <AddDialog id={id} create={createTask} title='Add Task'/>
       </div>
       <div ref={setNodeRef} className="p-3">
         {tasks.length === 0 ? 

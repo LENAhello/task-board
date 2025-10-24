@@ -15,16 +15,17 @@ import { Label } from "@/components/ui/label"
 interface AddTaskDialogProps {
     id?: string; 
     create: (formData: FormData) => Promise<void>;
+    title: string;
 }
 
-export default function AddDialog({ id, create }: AddTaskDialogProps) {
+export default function AddDialog({ id, create, title }: AddTaskDialogProps) {
 
     return (
         <>
             <Dialog>
                 {/* Button that opens the modal */}
                 <DialogTrigger asChild>
-                    <Button variant="outline">Add Task</Button>
+                    <Button variant="outline">{title}</Button>
                 </DialogTrigger>
 
                 {/* Modal content */}

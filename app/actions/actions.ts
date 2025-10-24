@@ -5,14 +5,19 @@ import { revalidatePath } from "next/cache";
 import z, { success } from "zod";
 import { LoginSchema, RegisterSchema } from "../utils/validationSchemas";
 import * as bcrypt from 'bcryptjs';
-import { signIn, signOut } from "@/auth";
+import { auth, signIn, signOut } from "@/auth";
 import { AuthError } from "next-auth";
 
 export async function createBoard(formData: FormData){
+    const session = await auth();
+    const userId = session?.user.id;
+    
+    if(!userId) return;
+    
     await prisma.board.create({
         data: {
             title: formData.get('title') as string,
-            userId: 'cmh4ji7gn0000bn7k35mz5jwl',
+            userId: userId,
         }
     });
 

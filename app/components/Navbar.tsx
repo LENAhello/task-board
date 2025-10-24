@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import { Button } from "@/components/ui/button";
+import { auth } from "@/auth";
 
 const links = [
   { href: "/", label: "Home" },
@@ -8,7 +9,10 @@ const links = [
   { href: "/about", label: "About" },
 ];
 
-const Navbar = () => {
+const Navbar = async () => {
+
+    const session = await auth();
+    console.log(session);
     return (
 
         <nav className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-sm">
@@ -35,12 +39,20 @@ const Navbar = () => {
         
                 {/* Right Side (Login/Profile) */}
                 <div>
-                <Link
-                    href="/login"
-                    className="px-5 py-2 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors duration-300"
-                >
-                    Login
-                </Link>
+                {session ? 
+                    <Link
+                        href="/profile"
+                        className="px-5 py-2 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors duration-300"
+                    >
+                        {session.user.name}
+                    </Link> : 
+                    <Link
+                        href="/login"
+                        className="px-5 py-2 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors duration-300"
+                    >
+                        Login
+                    </Link>
+                }
                 </div>
 
             </div>

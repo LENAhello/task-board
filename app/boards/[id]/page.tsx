@@ -30,7 +30,7 @@ const page = async ({ params }: {params: Promise<{ id: string }>}) => {
                 <BoardClient lists={board?.lists}/>
             </div>
             <div>
-                <AddDialog id={id} create={createList}/>
+                <AddDialog id={id} create={createList} title='Add New List'/>
             </div>
         </main>
     );

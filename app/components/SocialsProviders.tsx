@@ -14,7 +14,7 @@ const SocialsProviders = () => {
 
   return (
     <div className="flex gap-4">
-      <button className="flex-1 flex items-center justify-center gap-2 bg-white/10 border border-white/30 py-2 rounded-lg hover:bg-white/20 transition-all duration-300">
+      <button onClick={() => socialsLoginHandler('google')} className="flex-1 flex items-center justify-center gap-2 bg-white/10 border border-white/30 py-2 rounded-lg hover:bg-white/20 transition-all duration-300">
           <BsGoogle className="text-xl" color="white"/>
           Google
       </button>

@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../node_modules/.prisma/client"
@@ -13,7 +7,12 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
- 
+
+enum Role {
+  USER
+  ADMIN
+}
+
 model Account {
   userId            String
   type              String
@@ -26,58 +25,54 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
- 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
- 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@id([provider, providerAccountId])
   @@map("accounts")
 }
-// A user who owns boards
+
 model User {
-  id            String  @id @default(cuid()) // Unique ID (random string)
+  id            String    @id @default(cuid())
   name          String?
-  email         String          @unique
+  email         String    @unique
   password      String?
   emailVerified DateTime?
   image         String?
+  role          Role      @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  boards        Board[]
   accounts      Account[]
- 
-  boards    Board[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
   @@map("users")
 }
 
-// A board (like "Project Alpha")
 model Board {
   id        String   @id @default(cuid())
   title     String
-  user      User     @relation(fields: [userId], references: [id])
   userId    String
-  lists     List[]
   createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  lists     List[]
 }
 
-// A list (like "Todo", "Doing", "Done")
 model List {
   id        String   @id @default(cuid())
   title     String
   order     Int
-  board     Board    @relation(fields: [boardId], references: [id])
   boardId   String
-  tasks     Task[]
   createdAt DateTime @default(now())
+  board     Board    @relation(fields: [boardId], references: [id])
+  tasks     Task[]
 }
 
-// A task (like "Buy milk")
 model Task {
   id        String   @id @default(cuid())
   title     String
   order     Int
-  list      List     @relation(fields: [listId], references: [id])
   listId    String
   createdAt DateTime @default(now())
+  list      List     @relation(fields: [listId], references: [id])
 }

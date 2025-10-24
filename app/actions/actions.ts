@@ -12,7 +12,7 @@ export async function createBoard(formData: FormData){
     await prisma.board.create({
         data: {
             title: formData.get('title') as string,
-            userId: 'cmfzjoac00000bn9ch4qcdeao',
+            userId: 'cmh4ji7gn0000bn7k35mz5jwl',
         }
     });
 

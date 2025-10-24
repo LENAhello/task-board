@@ -17,6 +17,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return session;
     }
   },
+  events: {
+    async linkAccount({user}) {
+      await prisma.user.update({
+        where: {id: user.id},
+        data: {emailVerified: new Date()}
+      })
+    }
+  },
   adapter: PrismaAdapter(prisma),
   session: { strategy: 'jwt' },
   providers: [ 
@@ -37,5 +45,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Github({
       clientId: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET
-    }), Google ],
+    }), Google({
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET
+    }) ],
 })

@@ -6,7 +6,7 @@ import { ResetPasswordSchema } from "@/app/utils/validationSchemas";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import React, { useState } from "react";
-
+import { FaEye, FaEyeSlash  } from "react-icons/fa";
 
 const ResetPasswordForm = () => {
 
@@ -15,6 +15,9 @@ const ResetPasswordForm = () => {
 
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [clientErrors, setClientErrors] = useState('');
   const [serverErrors, setServerErrors] = useState('');
@@ -62,7 +65,7 @@ const ResetPasswordForm = () => {
         <div>
           <label htmlFor="password" className="block text-sm font-medium mb-1">Password</label>
             <input 
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               name="password"
               placeholder="••••••••"
               className="w-full px-4 py-2 rounded-lg bg-white/20 border border-white/30 placeholder-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-400"
@@ -70,11 +73,15 @@ const ResetPasswordForm = () => {
               onChange={(e) => setNewPassword(e.target.value)}
               disabled={loading}
             />
+            {showPassword ?
+              <FaEyeSlash onClick={() => setShowPassword(prev => !prev)} className="absolute right-12 top-32 text-white text-xl cursor-pointer hover:scale-110 transition-transform duration-200"/> :
+              <FaEye onClick={() => setShowPassword(prev => !prev)} className="absolute right-12 top-32 text-white text-xl cursor-pointer hover:scale-110 transition-transform duration-200"/>
+            }
         </div>
         <div>
           <label htmlFor="confirmPassword" className="block text-sm font-medium mb-1">Confirm Password</label>
             <input 
-              type="password"
+              type={showConfirmPassword ? 'text' : 'password'}
               name="confirmPassword"
               placeholder="••••••••"
               className="w-full px-4 py-2 rounded-lg bg-white/20 border border-white/30 placeholder-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-400"
@@ -82,6 +89,10 @@ const ResetPasswordForm = () => {
               onChange={(e) => setConfirmPassword(e.target.value)}
               disabled={loading}
             />
+            {showConfirmPassword ?
+              <FaEyeSlash onClick={() => setShowConfirmPassword(prev => !prev)} className="absolute right-12 top-52 text-white text-xl cursor-pointer hover:scale-110 transition-transform duration-200"/> :
+              <FaEye onClick={() => setShowConfirmPassword(prev => !prev)} className="absolute right-12 top-52 text-white text-xl cursor-pointer hover:scale-110 transition-transform duration-200"/>
+            }
         </div>
         <div className={`transition-all duration-300 ${clientErrors || serverErrors || serverSuccess ? 'visible' : 'invisible'}`}>
           { serverSuccess ? 

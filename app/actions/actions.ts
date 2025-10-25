@@ -7,13 +7,14 @@ import { LoginSchema, RegisterSchema } from "../utils/validationSchemas";
 import * as bcrypt from 'bcryptjs';
 import { auth, signIn, signOut } from "@/auth";
 import { AuthError } from "next-auth";
+import { ActionType } from "@/lib/types";
 
 export async function createBoard(formData: FormData){
     const session = await auth();
     const userId = session?.user.id;
     
     if(!userId) return;
-    
+
     await prisma.board.create({
         data: {
             title: formData.get('title') as string,
@@ -59,7 +60,7 @@ export async function moveTask(taskId: string, newListId: string) {
     }
 }
 
-export async function loginAction(data: z.infer<typeof LoginSchema>){
+export async function loginAction(data: z.infer<typeof LoginSchema>): Promise<ActionType>{
 
     const validation = LoginSchema.safeParse(data);
     if (!validation.success) {
@@ -81,10 +82,10 @@ export async function loginAction(data: z.infer<typeof LoginSchema>){
         }
         throw error;
     }
-    return { success: 'Logged in successfully'}
+    return { success: true, message: 'Logged in successfully'}
 }
 
-export async function registerAction(data: z.infer<typeof RegisterSchema>){
+export async function registerAction(data: z.infer<typeof RegisterSchema>): Promise<ActionType>{
 
     const validation = RegisterSchema.safeParse(data);
     if (!validation.success) {
@@ -106,6 +107,6 @@ export async function registerAction(data: z.infer<typeof RegisterSchema>){
     return { success: true, message: 'User registered successfully'}
 }
 
-export const logoutAction = async () => {
+export const logoutAction = async (): Promise<void> => {
     await signOut();
 }

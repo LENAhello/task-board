@@ -41,6 +41,9 @@ const RegisterForm = () => {
       if(!result.success) setServerErrors(result.message);
       
       setLoading(false);
+    }).catch(() => {
+      setLoading(false);
+      setServerErrors('Something went wrong')
     });
     
   }

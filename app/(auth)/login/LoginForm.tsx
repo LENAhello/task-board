@@ -4,7 +4,9 @@ import Alert from "@/app/components/Alert";
 import Loading from "@/app/components/Loading";
 import SocialsProviders from "@/app/components/SocialsProviders";
 import { LoginSchema } from "@/app/utils/validationSchemas";
+import Link from "next/link";
 import React, { useState } from "react";
+
 
 const LoginForm = () => {
 
@@ -22,13 +24,22 @@ const LoginForm = () => {
         const validation = LoginSchema.safeParse({ email, password });
         if (!validation.success) {
             const messages = validation.error.issues[0].message;
-            return setClientErrors(validation.error.issues[0].message);
+            return setClientErrors(messages);
         }
 
         setLoading(true);
         loginAction({email, password}).then((result) => {
-            if (!result.success) setServerErrors(result.message ?? '');
+            if (!result.success) {
+                setServerErrors(result.message ?? '');
+                setServerSuccess('');
+            } else {
+                setServerSuccess(result.message ?? '');
+                setServerErrors('');
+            }
             setLoading(false);
+        }).catch(() => {
+            setLoading(false);
+            setServerErrors('Something went wrong')
         });
     }
     return(
@@ -59,6 +70,9 @@ const LoginForm = () => {
                     disabled={loading}
                 />
             </div>
+            <div>
+                <Link href='/forgot-password' className='text-pink-200 hover:text-pink-100 text-sm transition-all duration-300 underline underline-offset-4'>Forgot Password?</Link>
+            </div>
             <div className={`transition-all duration-300 ${clientErrors || serverErrors || serverSuccess ? 'visible' : 'invisible'}`}>
                 { serverSuccess ? 
                     <Alert type='success' message={serverSuccess} /> : 
@@ -74,7 +88,7 @@ const LoginForm = () => {
             </button>
         </form>
 
-            {/* Divider */}
+        {/* Divider */}
         <div className="flex items-center my-6">
             <div className="flex-1 h-px bg-white/30"></div>
             <span className="px-3 text-sm text-white/70">or continue with</span>
